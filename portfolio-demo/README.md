@@ -4,12 +4,12 @@ This folder contains a standalone **static frontend portfolio demonstration** ba
 
 ## Important limitations
 
-- Uses **sample/simulated transactions** and browser `localStorage` only.
+- **Current live portfolio:** homepage plus original-style Login/Daftar pages only. The dashboard is intentionally unavailable to anonymous visitors and all `/dashboard` routes redirect to `/login.html`. The login/signup fields are disabled because there is no authentication backend.\n- The prior dashboard mockup source remains in GitHub but is excluded from the Vercel production deployment.
 - No authentication, PHP execution, MySQL connection, payment processing, or live donation system.
 - The original PHP/MySQL application remains in the repository root and is **not deployed** by this frontend preview.
 - Do not enter genuine donor, payment, or sensitive financial data.
 
-## Deploy on Vercel
+## Deployment flow (2026-11-06)\n\n- `Lihat Dashboard` on the homepage goes to `/login.html`.\n- Visitors can open Login and Daftar interfaces, but cannot submit credentials or access a dashboard.\n- `vercel.json` redirects direct dashboard requests back to Login.\n- This is **not an authenticated application**. True login, registration, and protected dashboard functionality require a secure backend and database; frontend route redirects by themselves are not authorization.\n\n## Deploy on Vercel
 
 1. Import `Gahyaka/jogoamaldigital` into Vercel as a **new project**.
 2. Set **Framework Preset: Other**.
