@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="JogoAmal Digital — pratinjau interaktif pengelolaan pemasukan, pengeluaran, dan pelaporan keuangan masjid. Proyek portofolio PHP dan MySQL.">
+  <meta name="theme-color" content="#102d30">
+  <title>JogoAmal Digital — Demo Portofolio</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#demo">Lewati ke dashboard</a>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Navigasi utama">
+      <a class="brand" href="#beranda" aria-label="JogoAmal Digital - beranda">
+        <span class="brand-symbol" aria-hidden="true">✦</span>
+        <span>JogoAmal<span class="brand-soft"> Digital</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#fitur">Fitur</a>
+        <a href="#demo">Dashboard</a>
+        <a class="nav-source" href="https://github.com/Gahyaka/jogoamaldigital" target="_blank" rel="noopener noreferrer">Kode GitHub ↗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="beranda">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="status-dot"></span> Proyek portofolio · Demo frontend</span>
+        <h1 id="hero-title">Lebih transparan.<br><em>Lebih berdampak.</em></h1>
+        <p>JogoAmal Digital adalah konsep aplikasi manajemen keuangan masjid untuk pencatatan donasi, pengeluaran, dan penyajian laporan yang mudah dipahami.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#demo">Jelajahi dashboard <span aria-hidden="true">↗</span></a>
+          <a class="btn secondary" href="https://github.com/Gahyaka/jogoamaldigital" target="_blank" rel="noopener noreferrer">Lihat kode sumber</a>
+        </div>
+        <p class="hero-note">Demo ini menggunakan data simulasi. Aplikasi asli dikembangkan dengan PHP &amp; MySQL.</p>
+      </div>
+      <div class="hero-visual" aria-label="Visualisasi konsep JogoAmal Digital">
+        <div class="mosque-image" role="img" aria-label="Ilustrasi masjid dan arsitektur atap">
+          <div class="architecture">
+            <div class="dome"></div><div class="tower left"></div><div class="tower right"></div><div class="building"></div>
+          </div>
+        </div>
+        <div class="floating-stat"><span class="floating-icon">↗</span><div><small>Pemasukan bulan ini</small><strong>Rp 18,6 jt</strong></div><span class="floating-chip">Contoh</span></div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Teknologi proyek">
+      <div class="wrap trust-inner">
+        <span>Dibangun dengan</span>
+        <strong>PHP</strong><strong>MySQL</strong><strong>HTML &amp; CSS</strong><strong>JavaScript</strong><strong>Tailwind CSS</strong>
+      </div>
+    </section>
+
+    <section class="features wrap" id="fitur">
+      <div class="section-intro">
+        <span class="section-kicker">FOKUS PRODUK</span>
+        <h2>Keuangan yang tertata,<br>kepercayaan yang terjaga.</h2>
+        <p>Alur kerja yang dirancang agar pemasukan dan pengeluaran dapat dipantau dengan sederhana.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-icon">▤</span><h3>Pencatatan transaksi</h3><p>Pemasukan donasi dan pengeluaran terdokumentasi dalam satu tempat.</p></article>
+        <article class="feature"><span class="feature-icon">◫</span><h3>Ringkasan visual</h3><p>Angka utama dan perbandingan bulanan ditampilkan dengan grafik yang mudah dibaca.</p></article>
+        <article class="feature"><span class="feature-icon">⌕</span><h3>Pencarian &amp; filter</h3><p>Cari transaksi berdasarkan keterangan atau jenis untuk menelusuri laporan lebih cepat.</p></article>
+      </div>
+    </section>
+
+    <section class="demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="wrap">
+        <div class="demo-heading">
+          <div><span class="section-kicker">COBA SEKARANG</span><h2 id="demo-title">Dashboard interaktif</h2><p>Masukkan transaksi contoh dan jelajahi laporan. Perubahan hanya tersimpan di browser ini.</p></div>
+          <span class="demo-label"><span class="status-dot"></span> Mode simulasi</span>
+        </div>
+
+        <div class="dashboard">
+          <div class="dashboard-top">
+            <div><div class="dashboard-overline">RINGKASAN KEUANGAN</div><h3>Ikhtisar Transaksi</h3><p id="date-label">Data simulasi</p></div>
+            <button class="outline-btn" id="reset-btn" type="button">↻ Reset data contoh</button>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi"><span>Total pemasukan</span><strong id="total-in">—</strong><small><span class="kpi-dot in"></span> Donasi &amp; infak contoh</small></div>
+            <div class="kpi"><span>Total pengeluaran</span><strong id="total-out">—</strong><small><span class="kpi-dot out"></span> Operasional contoh</small></div>
+            <div class="kpi accent"><span>Saldo simulasi</span><strong id="balance">—</strong><small>Selisih pemasukan &amp; pengeluaran</small></div>
+          </div>
+
+          <div class="dash-columns">
+            <div class="chart-panel">
+              <div class="panel-heading"><div><h4>Aktivitas 7 hari terakhir</h4><p>Nilai transaksi per hari</p></div><div class="legend"><i class="legend-in"></i> Masuk <i class="legend-out"></i> Keluar</div></div>
+              <div class="chart-area" id="chart" role="img" aria-label="Grafik pemasukan dan pengeluaran tujuh hari terakhir"></div>
+            </div>
+            <div class="add-panel">
+              <div class="panel-heading"><div><h4>Tambah transaksi contoh</h4><p>Tanpa akun, tanpa data asli</p></div></div>
+              <form id="transaction-form" class="form-stack">
+                <label for="type">Jenis transaksi</label>
+                <select id="type" required><option value="masuk">Pemasukan / Donasi</option><option value="keluar">Pengeluaran</option></select>
+                <label for="description">Keterangan</label>
+                <input id="description" name="description" type="text" maxlength="80" placeholder="Contoh: Donasi Jumat" required>
+                <label for="amount">Nominal (Rp)</label>
+                <input id="amount" name="amount" inputmode="numeric" type="number" min="1000" max="10000000000" step="1000" placeholder="250000" required>
+                <button class="btn primary full" type="submit">+ Tambahkan ke simulasi</button>
+                <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
+
+          <div class="table-panel">
+            <div class="panel-heading table-title"><div><h4>Riwayat transaksi</h4><p>Data contoh dan transaksi yang kamu tambahkan</p></div><span id="transaction-count" class="count">0 transaksi</span></div>
+            <div class="filter-row">
+              <label class="sr-only" for="search">Cari transaksi</label>
+              <input id="search" type="search" placeholder="Cari keterangan transaksi..." autocomplete="off">
+              <label class="sr-only" for="filter-type">Filter jenis transaksi</label>
+              <select id="filter-type"><option value="semua">Semua transaksi</option><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select>
+            </div>
+            <div class="table-scroll">
+              <table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th class="amount-col">Nominal</th></tr></thead><tbody id="transactions-body"></tbody></table>
+            </div>
+            <div id="empty-state" class="empty-state" hidden>Belum ada transaksi yang sesuai filter.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing wrap">
+      <div><span class="section-kicker">TENTANG PROYEK</span><h2>Teknologi untuk transparansi yang lebih baik.</h2><p>Proyek JogoAmal Digital dirancang untuk mendukung manajemen keuangan Masjid Jogokariyan, Yogyakarta. Source code asli mencakup backend PHP, autentikasi, dan integrasi MySQL.</p></div>
+      <a class="btn dark" href="https://github.com/Gahyaka/jogoamaldigital" target="_blank" rel="noopener noreferrer">Jelajahi repository ↗</a>
+    </section>
+  </main>
+  <footer class="footer"><div class="wrap footer-inner"><strong>✦ JogoAmal Digital</strong><span>Portfolio preview · Tidak terhubung ke layanan donasi atau database asli.</span><a href="#beranda">Kembali ke atas ↑</a></div></footer>
+</body>
+</html>
