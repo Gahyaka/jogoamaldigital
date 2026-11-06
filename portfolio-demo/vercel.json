@@ -1,0 +1,39 @@
+{
+  "redirects": [
+    {
+      "source": "/dashboard.html",
+      "destination": "/login.html",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/login.html",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard/",
+      "destination": "/login.html",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard.php",
+      "destination": "/login.html",
+      "permanent": false
+    },
+    {
+      "source": "/index.php",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/login.php",
+      "destination": "/login.html",
+      "permanent": false
+    },
+    {
+      "source": "/signup.php",
+      "destination": "/signup.html",
+      "permanent": false
+    }
+  ]
+}
