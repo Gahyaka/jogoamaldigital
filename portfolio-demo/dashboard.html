@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Keuangan Masjid | JogoAmal Digital</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* CSS styling tetap sama seperti versi Anda */
+        :root {
+            --primary: #2ca6a3;
+            --secondary: #248583;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light-bg: #f8fafc;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #248583;
+            transform: translateY(-1px);
+        }
+        .btn-success {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #248583;
+        }
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+        .income {
+            color: #2ca6a3;
+            font-weight: 500;
+        }
+        .expense {
+            color: var(--danger);
+            font-weight: 500;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        th {
+            background-color: var(--primary);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .saldo-card {
+            background: linear-gradient(135deg, #2ca6a3 0%, #34d399 100%);
+            color: white;
+            border-radius: 12px;
+        }
+        /* Form Controls */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 0.375rem;
+    background-color: #F9FAFB;
+    font-size: 0.875rem;
+    transition: all 0.15s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2ca6a3;
+    box-shadow: 0 0 0 3px rgba(33, 145, 80, 0.2);
+    background-color: #FFFFFF;
+}
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background-color: #e6f2eb;
+            color: #248583;
+        }
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }        
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex !important;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            max-width: 32rem;
+            margin: 2rem auto;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        /* Button Styles */
+        .btn-primary {
+            background-color: #2ca6a3;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #248583;
+        }
+
+        /* Show/Hide Classes */
+        .show,
+        .show-block {
+            display: block !important;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        
+        .payment-method-badge {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .payment-reference {
+            font-size: 11px;
+            color: #1e40af;
+            display: block;
+            margin-top: 2px;
+        }        #paymentReferenceField {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            margin-top: 0;
+        }
+        #paymentReferenceField.show {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+        .error-message {
+            color: #dc2626;
+            background-color: #fee2e2;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .error-message i {
+            margin-right: 0.5rem;
+        }
+        .income-card {
+            background-color: #f0fdf4;
+            border-left: 4px solid #10b981;
+        }
+        .expense-card {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        #adminPaymentMethod,
+        #adminPaymentReference {
+            display: none;
+        }
+        #adminPaymentMethod.show,
+        #adminPaymentReference.show {
+            display: block;
+        }
+        #adminPaymentMethod,
+        #adminPaymentReference {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        #adminPaymentMethod.hidden,
+        #adminPaymentReference.hidden {
+            display: none;
+        }
+        /* Edit Form Styles */
+        .edit-form label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .edit-form input,
+        .edit-form select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.375rem;
+            background-color: #F9FAFB;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+        }
+
+        .edit-form input:focus,
+        .edit-form select:focus {
+            outline: none;
+            border-color: #2ca6a3;
+            box-shadow: 0 0 0 3px rgba(33, 145, 80, 0.2);
+            background-color: #FFFFFF;
+        }
+
+        .edit-form button[type="submit"] {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2ca6a3;
+            color: white;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .edit-form button[type="submit"]:hover {
+            background-color: #248583;
+        }
+
+        .edit-form .form-group {
+            margin-bottom: 1rem;
+        }
+    [hidden]{display:none!important}.modal:not(.active){display:none!important}.role-section{min-width:0}.role-section>.card{height:100%}#demo-feedback{background:#e9f7f2;color:#17695a;padding:12px 16px;border:1px solid #b8dfd2;border-radius:8px;margin-bottom:20px}.demo-info{background:#fff7dc;border:1px solid #f3e0a2;border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#815b1e}</style>
+</head>
+<body class="bg-gray-50">
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Header -->
+<header class="flex flex-col md:flex-row justify-between items-center mb-8">
+    <div class="mb-4 md:mb-0">
+        <a href="/" class="flex items-center">
+            <h1 class="text-3xl font-bold text-gray-800">
+                <i class="fas fa-mosque text-[#2ca6a3] mr-2"></i> JogoAmal Digital
+            </h1>
+        </a>
+        <p class="text-gray-600">Manajemen keuangan masjid yang transparan</p>
+    </div>
+    <div class="flex items-center space-x-4" style="flex-wrap:wrap"><label class="text-sm text-gray-600">Mode demo <select id="demo-role" class="form-control" style="width:auto;padding:6px;margin-left:4px"><option value="user">Jamaah</option><option value="admin">Admin</option></select></label><div class="text-right">
+            <p class="text-sm text-gray-500">Halo,</p>
+            <p class="font-medium text-blue-600"><span id="demo-username">Jamaah (Demo)</span></p>
+        </div>
+        <a href="/" class="flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </a>
+    </div>
+</header>
+
+    <p class="demo-info"><strong>DEMO PORTOFOLIO:</strong> Tampilan mengikuti aplikasi JogoAmal Digital asli. Semua transaksi dan mode Admin/Jamaah hanya simulasi; tidak menerima pembayaran sungguhan.</p><div id="demo-feedback" hidden role="status"></div><!-- Saldo Card -->
+    <div class="saldo-card p-6 mb-8 shadow-lg">
+        <div class="flex justify-between items-center">
+            <div>
+                <p class="text-sm font-medium">Total Saldo Tersedia</p>
+                <h2 class="text-4xl font-bold">Rp <span id="totalSaldo">0,00</span></h2>
+            </div>
+            <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                <i class="fas fa-wallet text-2xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Income & Expense Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Pemasukan -->
+        <div class="card p-6 bg-green-50 border border-green-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm font-medium text-green-600">Total Pemasukan</p>
+                    <h2 class="text-2xl font-bold text-green-700">Rp <span id="totalIncome">0,00</span></h2>
+                </div>
+                <div class="bg-green-100 p-3 rounded-full">
+                    <i class="fas fa-arrow-down text-green-600"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Pengeluaran -->
+        <div class="card p-6 bg-red-50 border border-red-100">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-sm font-medium text-red-600">Total Pengeluaran</p>
+                    <h2 class="text-2xl font-bold text-red-700">Rp <span id="totalExpense">0,00</span></h2>
+                </div>
+                <div class="bg-red-100 p-3 rounded-full">
+                    <i class="fas fa-arrow-up text-red-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div id="admin-card" class="role-section" hidden>
+<!-- Admin Form -->
+<div class="card p-6">
+    <div class="flex items-center mb-4">
+        <div class="bg-[#e6f2eb] p-2 rounded-full mr-3">
+            <i class="fas fa-plus-circle text-[#2ca6a3]"></i>
+        </div>
+        <h3 class="text-lg font-semibold">Tambah Transaksi</h3>
+    </div>
+
+    <form method="POST" class="space-y-4" id="adminTransactionForm">
+        <!-- Nama -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+            <input type="text" name="nama" placeholder="Nama Pengguna" class="form-control w-full" required>
+        </div>
+
+        <!-- Jenis Transaksi -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Transaksi</label>
+            <select name="jenis" id="jenisTransaksi" class="form-control w-full" required>
+                <option value="">Pilih Jenis</option>
+                <option value="pemasukan">Pemasukan</option>
+                <option value="pengeluaran">Pengeluaran</option>
+            </select>
+        </div>
+
+        <!-- Deskripsi -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+            <input type="text" name="deskripsi" placeholder="Contoh: Donasi Jumat / Pembelian Perlengkapan"
+                   class="form-control w-full" required>
+        </div>
+
+        <!-- Jumlah -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah (Rp)</label>
+            <input type="number" name="jumlah" placeholder="500000" class="form-control w-full" required min="1">
+        </div>
+
+        <!-- Metode Pembayaran -->
+        <div id="adminPaymentMethod" style="display: none;">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Metode Pembayaran</label>
+            <select name="payment_method" id="adminPaymentMethodSelect" class="form-control w-full">
+                <option value="Tunai">Tunai</option>
+                <option value="Transfer Bank (simulasi)">Transfer Bank (simulasi)</option><option value="Dompet Digital (simulasi)">Dompet Digital (simulasi)</option>
+            </select>
+        </div>
+
+        <!-- Nomor Referensi -->
+        <div id="adminPaymentReference" style="display: none;">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Rekening Tujuan</label>
+            <input type="text" name="payment_reference" id="adminPaymentReferenceInput"
+                   placeholder="No. Rekening / Telephone" class="form-control w-full">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" name="simpan_transaksi" class="btn-primary w-full py-3 rounded-lg font-medium">
+            <i class="fas fa-save mr-2"></i> Simpan Transaksi
+        </button>
+    </form>
+</div>
+</div>
+
+        <div id="user-card" class="role-section">
+        <!-- User Donation Form -->
+        <div class="card p-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-green-100 p-2 rounded-full mr-3">
+                    <i class="fas fa-hand-holding-heart text-green-500"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Form Donasi</h3>
+            </div>
+            
+            
+            <form id="userDonationForm" method="POST" class="space-y-4">
+                <input type="hidden" name="jenis" value="pemasukan">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Asli / Samaran<span class="text-red-500">*</span></label>
+                    <input type="text" name="nama" placeholder="Nama Pengguna" class="form-control w-full" required
+                           value="">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Untuk Program <span class="text-red-500">*</span></label>
+                    <input type="text" name="deskripsi" placeholder="Contoh: Pembangunan Masjid" class="form-control w-full" required
+                           value="">
+                </div>
+
+                <!-- Jumlah Donasi -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Donasi (Rp) <span class="text-red-500">*</span></label>
+                    <input type="number" name="jumlah" min="1" step="any" placeholder="50000" class="form-control w-full" required
+                        value="">
+                </div>
+                <!-- Metode Pembayaran -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Metode Pembayaran <span class="text-red-500">*</span></label>
+    <select name="payment_method" id="userPaymentMethod" class="form-control w-full" required>
+        <option value="">Pilih Metode Pembayaran</option>
+        <option value="Transfer Bank (simulasi)">Transfer Bank (simulasi)</option><option value="Dompet Digital (simulasi)">Dompet Digital (simulasi)</option>
+    </select>
+</div>
+
+<!-- Nomor Referensi -->
+<div id="paymentReferenceField">
+    <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Rekening Anda</label>
+    <input type="text" name="payment_reference" placeholder="No. Rekening / Telepon" class="form-control w-full"
+           value="">
+    <p class="text-xs text-gray-500 mt-1">Simulasi saja — jangan mengirim uang atau informasi rekening asli.</p>
+</div>
+                <button type="submit" name="simpan_donasi" class="btn-success w-full py-3 rounded-lg font-medium flex items-center justify-center">
+                    <i class="fas fa-donate mr-2"></i> Donasi Sekarang
+                </button>
+            </form>
+            
+        </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="card p-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-purple-100 p-2 rounded-full mr-3">
+                    <i class="fas fa-filter text-purple-500"></i>
+                </div>
+                <h3 class="text-lg font-semibold">Filter Transaksi</h3>
+            </div>
+            <form method="GET" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Periode</label>
+                    <input type="date" id="periode" name="periode" class="form-control w-full">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Transaksi</label>
+                    <select name="jenis" id="jenis" class="form-control w-full">
+                        <option value="">Semua Jenis</option>
+                        <option value="pemasukan">Pemasukan</option>
+                        <option value="pengeluaran">Pengeluaran</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Program/Kegiatan</label>
+                    <input type="text" name="program" placeholder="Cari program..." class="form-control w-full">
+                </div>
+                <button type="submit" class="bg-purple-500 text-white w-full py-3 rounded-lg font-medium hover:bg-purple-600 transition flex items-center justify-center">
+                    <i class="fas fa-search mr-2"></i> Terapkan Filter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="card p-6 mb-8">
+        <div class="flex items-center mb-4">
+            <div class="bg-orange-100 p-2 rounded-full mr-3">
+                <i class="fas fa-chart-line text-orange-500"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Grafik Keuangan</h3>
+        </div>
+        <canvas id="chartKeuangan" height="300"></canvas>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="card p-6">
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center">
+            <div class="bg-indigo-100 p-2 rounded-full mr-3">
+                <i class="fas fa-history text-indigo-500"></i>
+            </div>
+            <h3 class="text-lg font-semibold">Riwayat Transaksi</h3>
+        </div>
+        <div class="text-sm text-gray-500">
+            Total: <span id="demo-count">0</span> transaksi
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="w-full">
+            <thead>
+                <tr>
+                    <th class="py-3 px-4 text-left">Tanggal</th>
+                    <th class="py-3 px-4 text-left">Nama</th>
+                    <th class="py-3 px-4 text-left">Jenis</th>
+                    <th class="py-3 px-4 text-left">Keterangan</th>
+                    <th class="py-3 px-4 text-left">Metode</th>
+                    <th class="py-3 px-4 text-right">Jumlah</th>
+                    
+                        <th class="py-3 px-4 text-center admin-only" hidden>Aksi</th>
+                    
+                </tr>
+            </thead>
+            <tbody id="demo-transactions"></tbody>
+        </table>
+    </div>
+</div>
+<div class="flex justify-end mt-4"><button id="reset-demo" class="px-4 py-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300 text-sm">↻ Reset Data Simulasi</button></div></div>
+
+<div id="demo-edit-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="edit-title"><div class="modal-content bg-white p-6 rounded-lg shadow-xl w-full max-w-md mx-auto"><div class="flex justify-between items-center mb-4"><h3 id="edit-title" class="text-xl font-bold text-gray-900">Edit Transaksi (Simulasi)</h3><button type="button" id="close-edit" class="text-gray-500 hover:text-gray-700 text-xl p-2" aria-label="Tutup">×</button></div><form id="demo-edit-form" class="space-y-4"><div><label class="block text-sm font-medium text-gray-700 mb-1">Nama</label><input name="nama" class="form-control" required maxlength="90"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">Jenis Transaksi</label><select name="jenis" class="form-control"><option value="pemasukan">Pemasukan</option><option value="pengeluaran">Pengeluaran</option></select></div><div><label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label><input name="deskripsi" class="form-control" required maxlength="160"></div><div><label class="block text-sm font-medium text-gray-700 mb-1">Jumlah (Rp)</label><input type="number" min="1" max="10000000000" step="1" name="jumlah" class="form-control" required></div><div><label class="block text-sm font-medium text-gray-700 mb-1">Metode Pembayaran</label><select name="payment_method" class="form-control"><option value="Tunai">Tunai</option><option value="Transfer Bank (simulasi)">Transfer Bank (simulasi)</option><option value="Dompet Digital (simulasi)">Dompet Digital (simulasi)</option></select></div><div class="flex justify-end gap-3 pt-2"><button id="cancel-edit" type="button" class="px-4 py-2 border rounded">Batal</button><button type="submit" class="btn-primary px-4 py-2 rounded">Simpan Perubahan</button></div></form></div></div><footer class="bg-[#2ca6a3] text-white py-12 px-4 mt-12">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Logo dan Deskripsi -->
+                <div class="col-span-1">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-mosque text-2xl mr-2"></i>
+                        <h2 class="text-xl font-bold">JogoAmal Digital</h2>
+                    </div>
+                    <p class="text-gray-100 mb-4">Platform manajemen keuangan masjid berbasis digital yang transparan dan akuntabel.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-100 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-100 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-100 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-100 hover:text-white transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Kontak -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-semibold mb-4 border-b border-[#ffffff] pb-2">Hubungi Kami</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-[#ffffff]"></i>
+                            <a href="https://maps.google.com/?q=Jl.+Jogokariyan+No.+36 ,+Mantrijeron,+Yogyakarta" 
+                       target="_blank" class="text-gray-100 hover:underline">
+                        Jl. Jogokariyan No. 36, Mantrijeron, Yogyakarta
+                    </a>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-[#ffffff]"></i>
+                            <a href="https://wa.me/6289661832244 " target="_blank" class="text-gray-100 hover:underline">
+                        +6289661832244
+                    </a>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-[#ffffff]"></i>
+                            <span>info@jogoamaldigital</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-[#ffffff] mt-8 pt-8 text-center text-gray-100">
+                <p>&copy; 2026 JogoAmal Digital. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/dashboard-demo.js" defer></script></body></html>
